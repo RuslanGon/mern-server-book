@@ -3,7 +3,9 @@ import cors from 'cors';
 import mongoose from 'mongoose';
 import Book from './models/Book.js';
 import { ObjectId } from 'mongodb';
+import dotenv from 'dotenv';
 
+dotenv.config()
 const app = express();
 const PORT = process.env.PORT || 5000;
 
@@ -66,9 +68,8 @@ app.delete("/book/:id", async (req, res) => {
 });  
 async function startServer() {
     try {
-        await mongoose.connect('mongodb+srv://book:book@cluster0.9yeu1fb.mongodb.net/books?retryWrites=true&w=majority&appName=Cluster0');
+        await mongoose.connect(`mongodb+srv://${process.env.MONGO_USERNAME}:${process.env.MONGO_PASSWORD}@${process.env.MONGO_CLUSTER}/${process.env.MONGO_DB_NAME}?retryWrites=true&w=majority&appName=Cluster0`);
         console.log("DB is connected");
-
         app.listen(PORT, () => {
             console.log(`Server is running on port ${PORT}`);
         });
