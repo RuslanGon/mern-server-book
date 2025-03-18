@@ -21,6 +21,15 @@ app.post('/upload-book', async (req, res) => {
     }
 });
 
+app.get('/all-book', async (req, res) => {
+    try {
+        const books = await Book.find(); 
+        res.status(200).json(books);
+    } catch (error) {
+        res.status(500).json({ error: 'Ошибка при получении всех книг' });
+    }
+});
+
 async function startServer() {
     try {
         await mongoose.connect('mongodb+srv://book:book@cluster0.9yeu1fb.mongodb.net/books?retryWrites=true&w=majority&appName=Cluster0');
