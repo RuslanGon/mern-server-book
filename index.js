@@ -55,13 +55,15 @@ app.patch("/book/:id", async (req, res) => {
 
 app.delete("/book/:id", async (req, res) => {
     try {
-        const books = await Book.find(); 
-        res.status(200).json(books);
+        const id = req.params.id;
+        const filter = { _id: new ObjectId(id) }; 
+        const result = await Book.deleteOne(filter)
+        res.send(result)
+
     } catch (error) {
         res.status(500).json({ error: 'Ошибка при удолении книги' });
     }
 });  
-
 async function startServer() {
     try {
         await mongoose.connect('mongodb+srv://book:book@cluster0.9yeu1fb.mongodb.net/books?retryWrites=true&w=majority&appName=Cluster0');
