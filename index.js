@@ -24,7 +24,7 @@ app.post('/upload-book', async (req, res) => {
     }
 });
 
-app.get('/all-book', async (req, res) => {
+app.get('/all-books', async (req, res) => {
     try {
         const books = await Book.find(); 
         res.status(200).json(books);
@@ -65,7 +65,21 @@ app.delete("/book/:id", async (req, res) => {
     } catch (error) {
         res.status(500).json({ error: 'Ошибка при удолении книги' });
     }
-});  
+}); 
+
+app.get("/all-books", async (req, res) => {
+  try {
+    const query = {};
+    if (req.query?.category) {
+      query = {category: req.query.category};
+    }
+    const result = await Book.find(query)
+  } catch (error) {
+    res.status(500).json({ error: "Ошибка при получении книг по категориям" });
+  }
+});
+
+
 async function startServer() {
     try {
         await mongoose.connect(`mongodb+srv://${process.env.MONGO_USERNAME}:${process.env.MONGO_PASSWORD}@${process.env.MONGO_CLUSTER}/${process.env.MONGO_DB_NAME}?retryWrites=true&w=majority&appName=Cluster0`);
