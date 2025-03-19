@@ -24,14 +24,14 @@ app.post('/upload-book', async (req, res) => {
     }
 });
 
-app.get('/all-books', async (req, res) => {
-    try {
-        const books = await Book.find(); 
-        res.status(200).json(books);
-    } catch (error) {
-        res.status(500).json({ error: 'Ошибка при получении всех книг' });
-    }
-});
+// app.get('/all-books', async (req, res) => {
+//     try {
+//         const books = await Book.find(); 
+//         res.status(200).json(books);
+//     } catch (error) {
+//         res.status(500).json({ error: 'Ошибка при получении всех книг' });
+//     }
+// });
 
 app.patch("/book/:id", async (req, res) => {
     try {
@@ -68,16 +68,17 @@ app.delete("/book/:id", async (req, res) => {
 }); 
 
 app.get("/all-books", async (req, res) => {
-  try {
-    const query = {};
-    if (req.query?.category) {
-      query = {category: req.query.category};
+    try {
+      let query = {}; 
+      if (req.query.category) {
+        query.category = req.query.category; 
+      }
+      const result = await Book.find(query); 
+      res.send(result); 
+    } catch (error) {
+      res.status(500).json({ error: "Ошибка при получении книг по категориям" });
     }
-    const result = await Book.find(query)
-  } catch (error) {
-    res.status(500).json({ error: "Ошибка при получении книг по категориям" });
-  }
-});
+  });
 
 
 async function startServer() {
