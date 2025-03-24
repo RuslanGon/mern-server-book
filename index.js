@@ -81,12 +81,20 @@ app.get("/all-books", async (req, res) => {
     }
   });
 
-app.get('/book/;id', async (req, res) => {
-const id = req.params.id
-const filter = {_id: new ObjectId(id)}
-const result = await Book.findOne(filter)
-res
-})  
+  app.get('/book/:id', async (req, res) => {
+    try {
+      const id = req.params.id;
+      const filter = { _id: new ObjectId(id) };
+      const result = await Book.findOne(filter);
+      if (!result) {
+        return res.status(404).json({ error: "Книга не найдена" });
+      }
+      res.json(result);
+    } catch (error) {
+      console.error("Ошибка при получении книги:", error);
+      res.status(500).json({ error: "Ошибка сервера" });
+    }
+  }); 
 
 
 async function startServer() {
