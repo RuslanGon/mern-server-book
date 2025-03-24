@@ -81,6 +81,13 @@ app.get("/all-books", async (req, res) => {
     }
   });
 
+app.get('/book/;id', async (req, res) => {
+const id = req.params.id
+const filter = {_id: new ObjectId(id)}
+const result = await Book.findOne(filter)
+res
+})  
+
 
 async function startServer() {
     try {
